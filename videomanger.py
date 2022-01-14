@@ -8,7 +8,7 @@ class VideoManger:
         self.player = mpv.MPV(input_vo_keyboard=True)
         self.player._set_property("keep-open", 'always')
         self.mediaDir = mediadir
-        self.idleImage = "/idle.jpg"
+        self.idleImage = "idle.jpg"
         self.player.fullscreen = fullscreen
 
         self.player.play(self.mediaDir + self.idleImage)
@@ -18,6 +18,7 @@ class VideoManger:
 
         @self.player.on_key_press('q')
         def close():
+            self.player.fullscreen = False
             print("Closing program goodbye!")
             self.close_func()
 

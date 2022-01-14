@@ -1,16 +1,17 @@
 import os
 import sys
 import time
+from pathlib import Path
 
 from videomanger import VideoManger
 from rfidmanger import RFID
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from waitress import serve
 
 app = Flask(__name__)
 
-mediadir = os.getcwd() + "/media"
-player = VideoManger(mediadir, True)
+mediadir = str(Path(__file__).parents[0]) + "/media/"
+player = VideoManger(mediadir, False)
 rfidmanger = RFID()
 
 
@@ -35,12 +36,12 @@ def index():
 def upload_clue():
     if request.files:
         file = request.files["clue"]
+        print(mediadir + file.filename)
         file.save(os.path.join(mediadir, file.filename))
 
-        redirect("/")
-
-    return ""
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
+    print(mediadir)
     serve(app, host="0.0.0.0", port=8080)
