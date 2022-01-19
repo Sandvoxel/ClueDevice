@@ -5,7 +5,39 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Upload Image</h1>
+
+    <form action="/pair-rfidCard" method="post">
+        <label for="files">Choose a file to pair:</label>
+        <select id="files" name="files">
+            {% for file in files %}
+                <option value="{{ file }}">{{ file }}</option>
+            {% endfor %}
+
+        </select>
+        <button type="submit" class="btn btn-primary">Pair Card</button>
+
+    </form>
+
+    <form action="/remove-cluefile" method="post">
+        <label for="files">Choose a file to delete:</label>
+        <select id="cluefiles" name="files">
+            {% for file in files %}
+                <option value="{{ file }}">{{ file }}</option>
+            {% endfor %}
+
+        </select>
+        <button type="submit" class="btn btn-primary">Remove File</button>
+
+    </form>
+
+    <label>Current Files</label>
+    <ul>
+        {% for file in files %}
+            <li>{{ file }}</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Upload Image</h4>
 
     <form action="/upload-clue-file" method="POST" enctype="multipart/form-data">
         <div class="form-group">
@@ -15,7 +47,6 @@
                 <label class="custom-file-label" for="clue">Select Clue Video File...</label>
             </div>
         </div>
-
         <button type="submit" class="btn btn-primary">Upload File</button>
     </form>
 

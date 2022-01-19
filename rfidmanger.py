@@ -11,7 +11,9 @@ class RFID(Thread):
         self.scanDelay = scandelay
         self.running = True
         self.reader = SimpleMFRC522()
-        Thread.__init__(self)
+        self.pairPath = None
+        self.pairCallback = None
+        Thread.__init__(self, args=(self,))
         self.start()
 
     def scanned(self, func):
@@ -25,7 +27,15 @@ class RFID(Thread):
             while not id and self.running:
                 id, text = self.reader.read_no_block()
 
+                if self.pairPath is not None:
+                    print("Waiting for card.")
+                    self.reader.write(self.pairPath)
+                    self.pairPath = None
+                    print("Card paired.")
+                    self.pairCallback()
+
             if not id:
+                print("closing rfid")
                 break
             print("ID: %s\nText: %s" % (id, text))
 
@@ -33,6 +43,10 @@ class RFID(Thread):
 
             # delay after clue given
             time.sleep(5)
+
+    def pair_card(self, path, callback):
+        self.pairCallback = callback
+        self.pairPath = "/" + path
 
     def stop(self):
         self.running = False
