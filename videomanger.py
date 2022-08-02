@@ -25,9 +25,14 @@ class VideoManger:
         time.sleep(2)
 
     def play_video(self, path):
-        if not exists(self.mediaDir + path):
+        try:
+            if not exists(self.mediaDir + path):
+                print("The given path \"{0}\" dose not exist".format(self.mediaDir + path))
+                return
+        except:
             print("The given path \"{0}\" dose not exist".format(self.mediaDir + path))
             return
+        
         self.player.play(self.mediaDir + path)
         self.player._set_property("pause", False)
         self.player.wait_until_playing()
